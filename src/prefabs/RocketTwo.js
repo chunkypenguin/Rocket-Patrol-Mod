@@ -1,7 +1,8 @@
 // rocket prefab
-class Rocket extends Phaser.GameObjects.Sprite{
+class RocketTwo extends Phaser.GameObjects.Sprite{
     constructor(scene, x, y,  texture, frame){
         super(scene, x, y, texture, frame)
+
         // add object to existing scene
         scene.add.existing(this)
         this.isFiring = false
@@ -12,15 +13,15 @@ class Rocket extends Phaser.GameObjects.Sprite{
     update() {
         // left/right movement
         if(!this.isFiring){
-            if(keyLEFT.isDown && this.x >= borderUISize + this.width){
+            if(keyLEFTTwo.isDown && this.x >= borderUISize + this.width){
                 this.x -= this.moveSpeed
-            } else if(keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width){
+            } else if(keyRIGHTTwo.isDown && this.x <= game.config.width - borderUISize - this.width){
                 this.x += this.moveSpeed
             }
         }
 
         // fire button
-        if(Phaser.Input.Keyboard.JustDown(keyFIRE) && !this.isFiring){
+        if(Phaser.Input.Keyboard.JustDown(keyFIRETwo) && !this.isFiring){
             this.isFiring = true
             this.sfxShot.play()
         }

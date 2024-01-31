@@ -6,8 +6,10 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
     preload(){
         //load images/tile sprites
         this.load.image('rocket', './assets/Rocket.png')
+        this.load.image('rockettwo', '/assets/RocketTwo.png')
         this.load.image('spaceship', './assets/SpaceShip.png')
         this.load.image('smallship', './assets/SmallShip.png')
+        this.load.image('mothership', './assets/MotherShip.png')
         this.load.image('starfield', './assets/Starfield.png')
 
         // load spritesheet
@@ -58,10 +60,6 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = 
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
-
-        //set speed up timer
-        //game.settings = {speedUpTimer: 50000}
-        //console.log(game.settings.speedUpTimer)
     }
 
     update(){
@@ -70,7 +68,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             game.settings = {
                 spaceshipSpeed: 1,
                 speedUpSpeed: 2,
-                gameTimer: 60000
+                gameTimer: 61000
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')
@@ -80,7 +78,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             game.settings = {
                 spaceshipSpeed: 2,
                 speedUpSpeed: 3,
-                gameTimer: 45000
+                gameTimer: 4000
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')

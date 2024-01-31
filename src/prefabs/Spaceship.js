@@ -6,6 +6,7 @@ class Spaceship extends Phaser.GameObjects.Sprite {
             this.points = pointValue
             this.moveSpeed = game.settings.spaceshipSpeed
             this.smallBoost = false;
+            this.motherShip = false;
     }
 
     update(){
@@ -21,6 +22,11 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         if(this.points > 30 && !this.smallBoost){
             this.moveSpeed += 0.5
             this.smallBoost = true
+        }
+
+        if(this.points > 50 && !this.motherShip){
+            this.moveSpeed -= 1
+            this.motherShip = true
         }
     }
 
