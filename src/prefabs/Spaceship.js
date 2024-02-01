@@ -23,8 +23,12 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
 
         // wrap from left to right edge
-        if(this.x <= 0- this.width) {
+        if(this.x <= 0 - this.width && this.respawnpoint == 0) {
             this.x = game.config.width
+        }
+
+        else if(this.x >= game.config.width && this.respawnpoint == 1){
+            this.x = 0 - borderUISize
         }
 
         if(this.points > 30 && !this.smallBoost){
