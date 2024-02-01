@@ -60,7 +60,12 @@ class Spaceship extends Phaser.GameObjects.Sprite {
             this.flipX = false
         }
         else{
-            this.x = 0 - borderUISize
+            if(this.motherShip){
+                this.x = 0 - borderUISize*3
+            }
+            else{
+                this.x = 0 - borderUISize
+            }
             this.flipX = true
         }
 
