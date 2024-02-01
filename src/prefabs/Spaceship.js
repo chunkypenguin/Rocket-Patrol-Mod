@@ -12,23 +12,28 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
     update(){
 
-        // move spaceship left
+        // move spaceship left o right
         if(this.respawnpoint == 0){
             this.x -= this.moveSpeed
         }
         else{
             this.x += this.moveSpeed
-            
         }
 
 
-        // wrap from left to right edge
+        // wrapping
         if(this.x <= 0 - this.width && this.respawnpoint == 0) {
             this.x = game.config.width
         }
 
         else if(this.x >= game.config.width && this.respawnpoint == 1){
-            this.x = 0 - borderUISize
+
+            if(this.motherShip){
+                this.x = 0 - borderUISize*3
+            }
+            else{
+                this.x = 0 - borderUISize
+            }
         }
 
         if(this.points == 75 && !this.smallBoost){
@@ -38,7 +43,7 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         }
 
         if(this.points == 150 && !this.motherShip){
-            this.moveSpeed -= 1
+            this.moveSpeed -= 1.5
             this.motherShip = true
         }
     }
@@ -64,14 +69,7 @@ class Spaceship extends Phaser.GameObjects.Sprite {
     // make current speed faster
     speedUp() {
 
-        this.moveSpeed += 0.5
-       /* if(!this.smallBoost){
-            this.moveSpeed = game.settings.speedUpSpeed
-        }
-
-        else{
-            this.moveSpeed += 1
-        }*/
+        this.moveSpeed += 1
 
     }
 }

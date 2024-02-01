@@ -70,8 +70,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)){
             //easy mode
             game.settings = {
-                spaceshipSpeed: 1,
-                speedUpSpeed: 2,
+                spaceshipSpeed: 2,
                 gameTimer: 61000,
                 twoPlayerMode: false
             }
@@ -81,8 +80,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)){
             //hard mode
             game.settings = {
-                spaceshipSpeed: 2,
-                speedUpSpeed: 3,
+                spaceshipSpeed: 3.5,
                 gameTimer: 46000,
                 twoPlayerMode: false
             }
@@ -92,9 +90,8 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(keyDOWN)){
             //TwoPlayer Mode
             game.settings = {
-                spaceshipSpeed: 2,
-                speedUpSpeed: 3,
-                gameTimer: 60000,
+                spaceshipSpeed: 3,
+                gameTimer: 61000,
                 twoPlayerMode: true
             }
             this.sound.play('sfx-select')
