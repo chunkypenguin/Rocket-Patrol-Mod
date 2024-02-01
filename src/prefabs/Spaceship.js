@@ -31,12 +31,13 @@ class Spaceship extends Phaser.GameObjects.Sprite {
             this.x = 0 - borderUISize
         }
 
-        if(this.points > 30 && !this.smallBoost){
+        if(this.points == 75 && !this.smallBoost){
             this.moveSpeed += 0.5
+            console.log
             this.smallBoost = true
         }
 
-        if(this.points > 50 && !this.motherShip){
+        if(this.points == 150 && !this.motherShip){
             this.moveSpeed -= 1
             this.motherShip = true
         }
