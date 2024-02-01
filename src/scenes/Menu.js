@@ -6,7 +6,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
     preload(){
         //load images/tile sprites
         this.load.image('rocket', './assets/Rocket.png')
-        this.load.image('rockettwo', '/assets/RocketTwo.png')
+        this.load.image('rockettwo', './assets/RocketTwo.png')
         this.load.image('spaceship', './assets/SpaceShip.png')
         this.load.image('smallship', './assets/SmallShip.png')
         this.load.image('mothership', './assets/MotherShip.png')
