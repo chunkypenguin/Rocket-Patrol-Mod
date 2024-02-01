@@ -24,6 +24,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.load.audio('sfx-shot', './assets/laserShoot.wav')
         this.load.audio('sfx-explosion', './assets/explosion.wav')
         this.load.audio('sfx-select', './assets/UISelect.wav')
+        this.load.audio('music', './assets/Music.mp3')
     }
     create() {
         // animation configuration
@@ -50,16 +51,19 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         //display menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', 
         menuConfig).setOrigin(0.5)
-        this.add.text(game.config.width/2, game.config.height/2, 'Use <--> arrows to move & (F) to fire', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2, 'P1: Use ←→ arrows to move & ↑ to fire', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5)
         menuConfig.backgroundColor = '#00FF00'
         menuConfig.color = '#000'
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press <- for Novice or -> for Expert', menuConfig).setOrigin(0.5)
-        
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding*5, 'Press ↓ for Two Player VS Mode', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding*9, 'P2:Use (A) & (D) to move & (W) to fire', menuConfig).setOrigin(0.5)
         // define keys
         keyLEFT = 
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = 
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+        keyDOWN =
+        this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
     }
 
     update(){
@@ -68,7 +72,8 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             game.settings = {
                 spaceshipSpeed: 1,
                 speedUpSpeed: 2,
-                gameTimer: 61000
+                gameTimer: 61000,
+                twoPlayerMode: false
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')
@@ -78,7 +83,19 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             game.settings = {
                 spaceshipSpeed: 2,
                 speedUpSpeed: 3,
-                gameTimer: 46000
+                gameTimer: 46000,
+                twoPlayerMode: false
+            }
+            this.sound.play('sfx-select')
+            this.scene.start('playScene')
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyDOWN)){
+            //TwoPlayer Mode
+            game.settings = {
+                spaceshipSpeed: 2,
+                speedUpSpeed: 3,
+                gameTimer: 60000,
+                twoPlayerMode: true
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')

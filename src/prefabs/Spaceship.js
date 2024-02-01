@@ -7,12 +7,20 @@ class Spaceship extends Phaser.GameObjects.Sprite {
             this.moveSpeed = game.settings.spaceshipSpeed
             this.smallBoost = false;
             this.motherShip = false;
+            this.respawnpoint = 0 
     }
 
     update(){
 
         // move spaceship left
-        this.x -= this.moveSpeed
+        if(this.respawnpoint == 0){
+            this.x -= this.moveSpeed
+        }
+        else{
+            this.x += this.moveSpeed
+            
+        }
+
 
         // wrap from left to right edge
         if(this.x <= 0- this.width) {
@@ -30,8 +38,22 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         }
     }
 
+    getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+
     reset() {
-        this.x = game.config.width
+        this.respawnpoint = this.getRandomInt(2)
+        console.log(this.respawnpoint)
+        if(this.respawnpoint == 0){
+            this.x = game.config.width
+            this.flipX = false
+        }
+        else{
+            this.x = 0 - borderUISize
+            this.flipX = true
+        }
+
     }
 
     // make current speed faster

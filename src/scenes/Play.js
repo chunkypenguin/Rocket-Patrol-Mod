@@ -10,8 +10,8 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         'starfield').setOrigin(0,0)
 
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, 
-        game.config.width, borderUISize, 0x00FF00).setOrigin(0, 0)
+        this.add.rectangle(0, borderUISize, 
+        game.config.width, borderUISize*1.5, 0x00FF00).setOrigin(0, 0)
 
         // white borders
         this.add.rectangle(0,0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0)
@@ -20,11 +20,18 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0)
 
         // add rocket (p1)
-        this.p1Rocket = new Rocket(this, game.config.width/2 + game.config.width/4, game.config.height - borderUISize - borderPadding, 'rocket', 0).setOrigin(0.5, 0)
-        this.p2Rocket = new RocketTwo(this,game.config.width/4, game.config.height - borderUISize - borderPadding, 'rockettwo', 0).setOrigin(0.5, 0)
+        if(!game.settings.twoPlayerMode){
+            this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket', 0).setOrigin(0.5, 0)
+        }
+
+        // add rocket p1 and p2
+        if(game.settings.twoPlayerMode){
+            this.p1Rocket = new Rocket(this, game.config.width/2 + game.config.width/4, game.config.height - borderUISize - borderPadding, 'rocket', 0).setOrigin(0.5, 0)
+            this.p2Rocket = new RocketTwo(this,game.config.width/4, game.config.height - borderUISize - borderPadding, 'rockettwo', 0).setOrigin(0.5, 0)
+        }
         
         // create point values for ships
-        this.shipValues= [10, 20, 30, 50, 150]
+        this.shipValues= [10, 20, 30, 75, 150]
 
 
         // add spaceships (x3)
@@ -36,7 +43,13 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         //mothership
         this.motherShip = new Spaceship(this, game.config.width + borderUISize*9, borderUISize*3, 'mothership', 0, this.shipValues[4]).setOrigin(0, 0)
         // set mothership health
-        this.motherShipHP = this.getRandomInt(6) + 5
+        if(game.settings.twoPlayerMode){
+            this.motherShipHP = this.getRandomInt(4) + 3
+        }
+        else{
+            this.motherShipHP = this.getRandomInt(3) + 2
+        }
+
         console.log(this.motherShipHP)
 
         // define keys
@@ -49,11 +62,16 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = 
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+        KeyMENU =
+        this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
 
         //player 2
-        keyFIRETwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-        keyLEFTTwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
-        keyRIGHTTwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        if(game.settings.twoPlayerMode){
+            keyFIRETwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+            keyLEFTTwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+            keyRIGHTTwo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        }
+
 
 
         // initialize scores
@@ -101,12 +119,18 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             fixedWidth: 100
         }
 
+        if(game.settings.twoPlayerMode){
+            this.scoreLeft = this.add.text(borderUISize + borderPadding,
+                borderUISize + borderPadding/2, this.p2Score, scoreConfigTwo)
+                
+            this.scoreRight = this.add.text(game.config.width/2 + borderUISize*5 + borderPadding,
+                borderUISize + borderPadding/2, this.p1Score, scoreConfig)
+        }
+        else {
+            this.scoreRight = this.add.text(borderUISize + borderPadding,
+                borderUISize + borderPadding/2, this.p1Score, scoreConfig)
+        }
 
-        this.scoreLeft = this.add.text(borderUISize + borderPadding,
-            borderUISize + borderPadding, this.p1Score, scoreConfigTwo)
-
-        this.scoreRight = this.add.text(game.config.width/2 + borderUISize*5 + borderPadding,
-            borderUISize + borderPadding, this.p1Score, scoreConfig)
 
         // displayed game timer
         this.displayedTimer = 0
@@ -114,7 +138,7 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.currentTimer = 0
         // display game timer
         this.timerMiddle = this.add.text(game.config.width/2, 
-            borderUISize + borderPadding, this.gameTimer, timeConfig).setOrigin(0.5, 0)
+            borderUISize + borderPadding/2, this.gameTimer, timeConfig).setOrigin(0.5, 0)
         
         // Game over flag
         this.gameOver = false
@@ -124,18 +148,25 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             //this.add.text(game.config.width/2, game.config.height/2,
             //'GAME OVER', scoreConfig).setOrigin(0.5)
-            if(this.p1Score > this.p2Score){
-                this.WinnerText = 'Player One Wins!'
+
+            if(game.settings.twoPlayerMode){
+                if(this.p1Score > this.p2Score){
+                    this.WinnerText = 'Player One Wins!'
+                }
+                else if (this.p1Score < this.p2Score){
+                    this.WinnerText = 'Player Two Wins!'
+                }
+                else{
+                    this.WinnerText = "Tie Game!"
+                }
             }
-            else if (this.p1Score < this.p2Score){
-                this.WinnerText = 'Player Two Wins!'
+            else {
+                this.WinnerText = 'GAME OVER'
             }
-            else{
-                this.WinnerText = "Tie Game!"
-            }
+
             this.add.text(game.config.width/2, game.config.height/2, this.WinnerText, scoreConfig).setOrigin(0.5)
             this.add.text(game.config.width/2, game.config.height/2 + 
-            64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5)
+            64, '(R) to Restart or (M) for Menu', scoreConfig).setOrigin(0.5)
             this.gameOver = true
         }, null, this)
 
@@ -159,7 +190,8 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)){
             this.scene.restart()
         }
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        // go to main menu at any time
+        if(Phaser.Input.Keyboard.JustDown(KeyMENU)) {
             this.scene.start("menuScene")
         }
 
@@ -167,7 +199,11 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         
         if(!this.gameOver){
             this.p1Rocket.update()
-            this.p2Rocket.update()
+
+            if(game.settings.twoPlayerMode){
+                this.p2Rocket.update()
+            }
+
             // update spaceships x3
             this.ship01.update()
             this.ship02.update()
@@ -208,37 +244,43 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             else{
                 this.motherShipSpriteFlash()
             }
+            this.sound.play('sfx-explosion')
         }
 
 
         // check collisions player two
-        if(this.checkCollision(this.p2Rocket, this.ship03)){
-            this.p2Rocket.reset()
-            this.shipExplode(this.ship03, this.p2Rocket)
-        }
-        if(this.checkCollision(this.p2Rocket, this.ship02)){
-            this.p2Rocket.reset()
-            this.shipExplode(this.ship02, this.p2Rocket)
-        }
-        if(this.checkCollision(this.p2Rocket, this.ship01)){
-            this.p2Rocket.reset()
-            this.shipExplode(this.ship01, this.p2Rocket)
-        }
-        if(this.checkCollision(this.p2Rocket, this.shipSmall)){
-            this.p2Rocket.reset()
-            this.shipExplode(this.shipSmall, this.p2Rocket)
-        }
-        if(this.checkCollision(this.p2Rocket, this.motherShip)){
-            this.p2Rocket.reset()
-            this.motherShipHP --
-            if(this.motherShipHP < 0){
-                this.shipExplode(this.motherShip, this.p2Rocket)
-                console.log(this.motherShipHP)
+        if(game.settings.twoPlayerMode){
+
+            if(this.checkCollision(this.p2Rocket, this.ship03)){
+                this.p2Rocket.reset()
+                this.shipExplode(this.ship03, this.p2Rocket)
             }
-            else{
-                this.motherShipSpriteFlash()
+            if(this.checkCollision(this.p2Rocket, this.ship02)){
+                this.p2Rocket.reset()
+                this.shipExplode(this.ship02, this.p2Rocket)
+            }
+            if(this.checkCollision(this.p2Rocket, this.ship01)){
+                this.p2Rocket.reset()
+                this.shipExplode(this.ship01, this.p2Rocket)
+            }
+            if(this.checkCollision(this.p2Rocket, this.shipSmall)){
+                this.p2Rocket.reset()
+                this.shipExplode(this.shipSmall, this.p2Rocket)
+            }
+            if(this.checkCollision(this.p2Rocket, this.motherShip)){
+                this.p2Rocket.reset()
+                this.motherShipHP --
+                if(this.motherShipHP < 0){
+                    this.shipExplode(this.motherShip, this.p2Rocket)
+                    console.log(this.motherShipHP)
+                }
+                else{
+                    this.motherShipSpriteFlash()
+                }
+                this.sound.play('sfx-explosion')
             }
         }
+
 
         this.motherShip
 
@@ -273,7 +315,13 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             this.scoreLeft.text = this.p2Score
         }
         if(ship == this.motherShip){
-            this.motherShipHP = this.getRandomInt(6) + 5
+            if(game.settings.twoPlayerMode){
+                this.motherShipHP = this.getRandomInt(4) + 3
+            }
+            else{
+                this.motherShipHP = this.getRandomInt(3) + 2
+            }
+
             console.log(this.motherShipHP)
         }
         // temporarily hide ship
@@ -288,11 +336,21 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             })
 
         // add score text when a ship is hit
-        this.scoreJuice = this.add.text(ship.x, ship.y, ship.points).setOrigin(0)
-        this.scoreJuice.alpha = 1
-        this.scoreJuiceClock = this.time.delayedCall(500, () => {
-            this.scoreJuice.alpha = 0
-        }, null, this)
+        if(rocket == this.p1Rocket){
+            this.scoreJuice = this.add.text(ship.x, ship.y, ship.points).setOrigin(0)
+            this.scoreJuiceClock = this.time.delayedCall(500, () => {
+                this.scoreJuice.destroy()
+            }, null, this)
+        }
+
+        if(rocket == this.p2Rocket){
+            this.scoreJuiceTwo = this.add.text(ship.x, ship.y, ship.points).setOrigin(0)
+            this.scoreJuiceClockTwo = this.time.delayedCall(500, () => {
+                this.scoreJuiceTwo.destroy()
+            }, null, this)
+        }
+
+
 
         this.sound.play('sfx-explosion')
     }
