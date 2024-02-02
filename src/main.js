@@ -10,6 +10,9 @@
 // +5 create another new enemy spaceship that takes multiple hits(new art, larger, moves slower, lots of points, has randomized HP (like supersmash bros ball!))
 // +5 simultaneous two-player VS mode with custom scoring system, UI and win screen
 
+//Added BG music 
+//https://freesound.org/people/Volvion/sounds/265308/
+
 let config = {
     type: Phaser.AUTO,
     width: 640,
