@@ -50,8 +50,6 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             this.motherShipHP = this.getRandomInt(3) + 2
         }
 
-        console.log(this.motherShipHP)
-
         // define keys
         //Player 1
         keyFIRE = 
@@ -239,7 +237,6 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             if(this.motherShipHP < 0){
                 
                 this.shipExplode(this.motherShip, this.p1Rocket)
-                console.log(this.motherShipHP)
             }
             else{
                 this.motherShipSpriteFlash()
@@ -272,7 +269,6 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
                 this.motherShipHP --
                 if(this.motherShipHP < 0){
                     this.shipExplode(this.motherShip, this.p2Rocket)
-                    console.log(this.motherShipHP)
                 }
                 else{
                     this.motherShipSpriteFlash()
@@ -321,13 +317,11 @@ class Play extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
             else{
                 this.motherShipHP = this.getRandomInt(3) + 2
             }
-
-            console.log(this.motherShipHP)
         }
         // temporarily hide ship
         ship.alpha = 0
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0,0)
+        let boom = this.add.sprite(ship.x, ship.y, 'explosionSheet').setOrigin(0,0)
         boom.anims.play('explode')
         boom.on('animationcomplete', () => {
             ship.reset()

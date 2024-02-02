@@ -13,7 +13,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.load.image('starfield', './assets/Starfield.png')
 
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/SpaceshipBrokeSpriteSheet.png', {
+        this.load.spritesheet('explosionSheet', './assets/SpaceshipBrokeSpriteSheet.png', {
             frameWidth: 64,
             frameHeight: 32,
             startFrame: 0,
@@ -30,7 +30,7 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         // animation configuration
         this.anims.create({
             key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', {
+            frames: this.anims.generateFrameNumbers('explosionSheet', {
                 start: 0, end: 8, first: 0}),
                 frameRate: 30
         })
@@ -64,6 +64,22 @@ class Menu extends Phaser.Scene{ //Menu class becomes a child of Phaser.Scene
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
         keyDOWN =
         this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+
+        this.bgMusic = this.sound.add('music', {volume: 0.5, loop: true})
+
+        //if (!this.musicPlayed)
+        
+
+        if(!this.musicPlayed){
+            this.bgMusic.play()
+            this.musicPlayed = true
+        }
+
+        if (this.musicPlayed && this.scene.isActive('playScene')){
+            this.musicPlayed = false
+        }
+
+        
     }
 
     update(){

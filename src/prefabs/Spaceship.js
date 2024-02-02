@@ -38,7 +38,6 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
         if(this.points == 75 && !this.smallBoost){
             this.moveSpeed += 0.5
-            console.log
             this.smallBoost = true
         }
 
@@ -54,7 +53,6 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
     reset() {
         this.respawnpoint = this.getRandomInt(2)
-        console.log(this.respawnpoint)
         if(this.respawnpoint == 0){
             this.x = game.config.width
             this.flipX = false
